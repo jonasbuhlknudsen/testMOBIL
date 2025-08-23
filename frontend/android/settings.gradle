@@ -1,0 +1,60 @@
+pluginManagement {
+  def reactNativeGradlePlugin
+  try {
+    reactNativeGradlePlugin = new File(
+      providers.exec {
+        workingDir(rootDir)
+        if (System.properties['os.name'].toLowerCase().contains('windows')) {
+          commandLine("cmd", "/c", "node --print \"require.resolve('@react-native/gradle-plugin/package.json', { paths: [require.resolve('react-native/package.json')] })\"")
+        } else {
+          commandLine("node", "--print", "require.resolve('@react-native/gradle-plugin/package.json', { paths: [require.resolve('react-native/package.json')] })")
+        }
+      }.standardOutput.asText.get().trim().replace('\r', '').replace('\n', '')
+    ).getParentFile().absolutePath
+  } catch (Exception e) {
+    // Fallback to default path if node command fails
+    reactNativeGradlePlugin = new File(rootDir, "../node_modules/@react-native/gradle-plugin").absolutePath
+  }
+  includeBuild(reactNativeGradlePlugin)
+  
+  def expoPluginsPath
+  try {
+    expoPluginsPath = new File(
+      providers.exec {
+        workingDir(rootDir)
+        if (System.properties['os.name'].toLowerCase().contains('windows')) {
+          commandLine("cmd", "/c", "node --print \"require.resolve('expo-modules-autolinking/package.json', { paths: [require.resolve('expo/package.json')] })\"")
+        } else {
+          commandLine("node", "--print", "require.resolve('expo-modules-autolinking/package.json', { paths: [require.resolve('expo/package.json')] })")
+        }
+      }.standardOutput.asText.get().trim().replace('\r', '').replace('\n', ''),
+      "../android/expo-gradle-plugin"
+    ).absolutePath
+  } catch (Exception e) {
+    // Fallback to default path if node command fails
+    expoPluginsPath = new File(rootDir, "../node_modules/expo-modules-autolinking/android/expo-gradle-plugin").absolutePath
+  }
+  includeBuild(expoPluginsPath)
+}
+}
+
+plugins {
+  id("com.facebook.react.settings")
+  id("expo-autolinking-settings")
+}
+
+extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
+  if (System.getenv('EXPO_USE_COMMUNITY_AUTOLINKING') == '1') {
+    ex.autolinkLibrariesFromCommand()
+  } else {
+    ex.autolinkLibrariesFromCommand(expoAutolinking.rnConfigCommand)
+  }
+}
+expoAutolinking.useExpoModules()
+
+rootProject.name = 'Nerdværket'
+
+expoAutolinking.useExpoVersionCatalog()
+
+include ':app'
+includeBuild(expoAutolinking.reactNativeGradlePlugin)

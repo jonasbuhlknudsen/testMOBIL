@@ -1,0 +1,88 @@
+<analysis>
+The previous AI engineer successfully initiated the Nerdværket mobile app, replicating LOY PLAY features for an iDot-3 LED screen via BLE. Initial work covered core BLE, Zustand state management, and Expo Router navigation. A significant part involved a chunked image transfer protocol and a comprehensive UI/UX overhaul. Debugging infrastructure and TypeScript issues was a recurring theme. The AI progressed through a major feature expansion, implementing LOY PLAY-paritet features across three phases. Phase 1 established a robust multi-profile BLE architecture with a global GATT queue and a protocol engine. Phase 2 delivered functional color and scene controls. Debugging was a major part of the trajectory, with repeated white screen issues, Git corruption, and persistent build failures for APKs, all requiring the intervention of a troubleshoot agent. The AI demonstrated resilience in fixing numerous runtime errors and environment issues. The work concluded with the start of Phase 3, focusing on advanced UI features.
+</analysis>
+
+<product_requirements>
+The Nerdværket application is an Expo mobile app controlling an iDot-3 LED Pixel Screen via BLE, aiming for LOY PLAY app parity.
+**Core Functional Requirements:** BLE connectivity (Service UUID FEE7, Write 36F5, Notify 36F6, plus new UART and Fallback profiles), Screen Control (Solid Color, Animations, Image Transfer with SOF/CHUNK/EOF, CRC16, Games, Text Scroller, Power, Brightness).
+**User Experience:** LOY PLAY-inspired UI, tab-based navigation (Connect, Visuals, Media, Games, Settings), branding (Nerdværket logo, dark theme, gradients, blur-cards, clear typography, large touch targets, Ionicons), ACK badges, notify logs, error popups.
+**Technical Constraints:** Development Builds for BLE, byte processing, base64, robust ACK/timeout/retry.
+**Recent Additions & Future Scope (LOY PLAY-paritet):**
+*   **BLE Foundation:** Multi-profile support (UART, FFF0 fallback), MTU 247, auto-reconnect, GATT queue, error handling. Filtering on YS name or service UUIDs.
+*   **Protocol Layer:** Transport-agnostic, ASCII/UTF-8/HEX ↔ bytes, framing/reassembly, heartbeat, configurable checksum, JSON command schema ().
+*   **UI Features:** Color wheel (HSV, CCT, RGB/W/CCT), gamma, brightness/speed sliders, power on/off. IC/Pixel setup (type, count, segments, power-limit). Scenes & Effects (presets, editor, save/load). DIY Editor (keyframes, palettes, image/text to LED). Music/Mic modes (real-time FFT, beat detection). Camera/Image modes (color sampler). Timers & Schedules (sleep/wake, daily/weekly, sunrise/sunset). Groups & Sync (broadcast, leader-follower). OTA/DFU (stub). Backup/Restore (JSON). Multi-language (Danish/English) & Theme (light/dark).
+*   **UI Screens:** Scan, Device, Groups, Settings, Logs.
+*   **Permissions:** Android (BLE_SCAN, BLE_CONNECT, RECORD_AUDIO), iOS (CoreBluetooth, Microphone).
+*   **Stability:** Global GATT queue, timeouts, retries, MTU logging.
+</product_requirements>
+
+<key_technical_concepts>
+-   **React Native / Expo:** Cross-platform mobile development framework.
+-   **:** Bluetooth Low Energy communication.
+-   **Expo Router:** File-based navigation.
+-   **Zustand:** Global state management (BLE state, UI state).
+-   **CRC16-CCITT:** Checksum for data integrity.
+-   **Image Protocol (SOF/CHUNK/EOF):** Custom image streaming.
+-   **:** PNG image decoding.
+-   **:** For animations (attempted, reverted due to issues).
+-   **:** UI component for sliders.
+-   **Custom UI Framework:** Themed components, consistent LOY PLAY-inspired design.
+-   **GATT Queue:** Sequential BLE operations with prioritization and timeouts.
+-   **Protocol Engine:** Transport-agnostic command encoding and parameter validation.
+</key_technical_concepts>
+
+<code_architecture>
+
+**High-Level Architecture:** An Expo/React Native frontend interfaces with an iDot-3 LED screen via BLE. A FastAPI/MongoDB backend provides API services. Expo Router manages file-based navigation. A new multi-profile BLE architecture with a global GATT queue and a protocol engine facilitates robust BLE communication and command handling. UI components follow a custom, LOY PLAY-inspired theme.
+
+**Detailed Directory Structure and Key Files (with changes):**
+-   ****: Defines tab bar. Custom header with  and .
+-   ****: Visuals screen. Updated to link to  and now .
+-   ****: Primary animations screen. Modified to use the new  and  components.
+-   ****: *New file*. Dedicated screen for color and scene controls.
+-   ****: App configuration. Updated for new logo path, splash screen settings, and  (Hermes disabled for Android builds during troubleshooting).
+-   ****: Application logo. Replaced with the new nerd-themed logo.
+-   ****: *New file*. Created to configure  plugin, then modified to *remove* reanimated references after issues, then re-added  for build issues.
+-   ****: Core BLE logic. Updated for multi-profile device detection, MTU negotiation, auto-enable notifications, and enhanced filtering based on new BLE profiles.
+-   ****: Logic for reading device screen resolution.
+-   ****: *New file*. Implements a global queue for sequential BLE operations with prioritization, timeouts, and error handling.
+-   ****: *New file*. Defines the UART, Fallback (FFF0), and Legacy iDot-3 (FEE7) BLE service/characteristic UUIDs for multi-profile device support.
+-   ****: Animation data. Properties added for better typing.
+-   ****: *New file*. JSON configuration defining command structure, target characteristics, payload templates, and parameters for various LED control functions.
+-   ****: *New file*. Manages command encoding, parameter validation, CRC16 checksum, and payload chunking, acting as a transport-agnostic layer.
+-   ****: Zustand store. Modified to integrate with the new BLE profiles and , storing detected device resolution and managing a  method. Backup () was created during a major refactor.
+-   ****: UI component. Fixed TypeScript errors related to optional properties.
+-   ****: *New file*. Contains UI for HSV color wheel, CCT sliders, RGB/RGBW modes, power, and brightness. Fixed  import issue.
+-   ****: Reusable UI components. , ,  were initially updated with  transitions, then reverted due to issues. A new  component was added, replacing custom  styles.
+-   ****: *New file*. Placeholder component for the DIY editor (keyframe editor).
+-   ****: *New file*. Reusable component for displaying empty state messages with icons.
+-   ****: *New file*. Placeholder component for music/microphone controls.
+-   ****: *New file*. UI for scene selection, presets, and parameter controls. Fixed  import issue.
+-   ****: Header component. Updated  icon to .
+-   ****: Application theme. Confirmed  color exists.
+-   ****: Visuals screen. The  icon was changed to .
+</code_architecture>
+
+<pending_tasks>
+-   Re-implement Reanimated transitions for tiles and screen changes (after resolving underlying issues).
+-   Further refine typography and spacing (paddings/margins) across all screens for optimal visual consistency.
+-   Implement the actual BLE communication within  to read device resolution from hardware.
+-   Continue implementing Phase 3: DIY editor, music/microphone features, IC/Pixel setup, Timers & schedules, Groups & sync.
+</pending_tasks>
+
+<current_work>
+Immediately before this summary request, the AI engineer was starting **Phase 3 - Advanced Features** development, specifically focusing on the DIY editor and music/microphone features. This phase is part of the larger LOY PLAY-paritet project requirements.
+
+The AI just created two new placeholder UI components:
+1.  ****: Intended for a LOY PLAY-style keyframe editor.
+2.  ****: Intended for music/microphone real-time FFT and control.
+
+The very last action and plan was to:
+*   Create a combined Media-skærm (Media screen) to integrate these new advanced features. This suggests a new route file and potentially a new layout for these functionalities, similar to how  was created for Phase 2.
+
+This follows significant efforts in Phase 1 (Core BLE Foundation with multi-profile architecture, GATT queue, and protocol engine) and Phase 2 (Color and Scene Controls). Phase 2 involved creating , , and , which after multiple bug reports from the user (white screens, React component import errors,  with ), were successfully fixed and are now declared fully functional.
+</current_work>
+
+<optional_next_step>
+Create the combined Media-skærm (Media screen) to integrate the  and  components.
+</optional_next_step>

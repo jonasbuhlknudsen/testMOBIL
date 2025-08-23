@@ -1,0 +1,276 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BLE Command Entry",
+  "type": "object",
+  "required": [
+    "command_name",
+    "service_uuid",
+    "write_char_uuid",
+    "write_mode"
+  ],
+  "properties": {
+    "protocol_name": {
+      "type": "string",
+      "description": "Human name for the protocol/model"
+    },
+    "protocol_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "confidence": {
+      "type": "string",
+      "enum": [
+        "assumed",
+        "measured",
+        "unknown"
+      ]
+    },
+    "command_name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "service_uuid": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F-]{36}$"
+    },
+    "write_char_uuid": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F-]{36}$"
+    },
+    "notify_char_uuid": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9a-fA-F-]{36}$"
+    },
+    "write_mode": {
+      "type": "string",
+      "enum": [
+        "with_response",
+        "without_response"
+      ]
+    },
+    "frame": {
+      "type": "object",
+      "properties": {
+        "header": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Hex bytes separated by spaces"
+        },
+        "cmd_id": {
+          "type": [
+            "string",
+            "integer",
+            "null"
+          ],
+          "description": "e.g. '0x02' or 2"
+        },
+        "payload_format": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Free-form note, e.g. 'RR GG BB'"
+        },
+        "payload_fields": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "type",
+              "offset_bytes",
+              "length_bits"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "uint",
+                  "int",
+                  "bool",
+                  "enum",
+                  "bytes"
+                ]
+              },
+              "offset_bytes": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "length_bits": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "endianness": {
+                "type": "string",
+                "enum": [
+                  "le",
+                  "be"
+                ],
+                "default": "le"
+              },
+              "min": {
+                "type": [
+                  "integer",
+                  "number",
+                  "null"
+                ]
+              },
+              "max": {
+                "type": [
+                  "integer",
+                  "number",
+                  "null"
+                ]
+              },
+              "unit": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "enum_map": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "additionalProperties": {
+                  "type": [
+                    "integer",
+                    "string"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "footer": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "checksum": {
+          "type": "object",
+          "properties": {
+            "method": {
+              "type": "string",
+              "enum": [
+                "none",
+                "xor",
+                "sum_mod_256",
+                "crc8",
+                "crc16_ccitt",
+                "custom"
+              ]
+            },
+            "start_offset": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "byte index inclusive"
+            },
+            "end_offset": {
+              "type": "integer",
+              "minimum": -1,
+              "description": "byte index inclusive (-1 means until last payload byte)"
+            },
+            "polynomial": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "init": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "xorout": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "method"
+          ]
+        },
+        "example_request_hex": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "e.g. 'AA 55 02 FF 00 00 96'"
+        },
+        "example_response_hex": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "response_fields": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "offset_bytes",
+          "length_bits"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "offset_bytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "length_bits": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "uint",
+              "int",
+              "bool",
+              "enum",
+              "bytes"
+            ]
+          },
+          "unit": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "enum_map": {
+            "type": [
+              "object",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

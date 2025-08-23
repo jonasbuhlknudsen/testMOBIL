@@ -1,0 +1,22 @@
+// Static Windows-compatible settings.gradle - NO Node.js commands
+// pluginManagement MUST be first!
+pluginManagement {
+    // Static paths - no dynamic resolution
+    def reactNativeGradlePlugin = new File(rootDir, "../node_modules/@react-native/gradle-plugin").absolutePath
+    def expoPluginsPath = new File(rootDir, "../node_modules/expo-modules-autolinking/android/expo-gradle-plugin").absolutePath
+    
+    includeBuild(reactNativeGradlePlugin)
+    includeBuild(expoPluginsPath)
+}
+
+plugins {
+    id("com.facebook.react.settings")
+}
+
+rootProject.name = 'Nerdværket'
+
+extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
+    ex.autolinkLibrariesFromCommand()
+}
+
+include ':app'

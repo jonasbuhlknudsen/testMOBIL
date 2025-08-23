@@ -1,0 +1,69 @@
+{
+  "protocol": "idot3_image_v1",
+  "ble": {
+    "service_uuid": "0000fee7-0000-1000-8000-00805f9b34fb",
+    "write_char_uuid": "000036f5-0000-1000-8000-00805f9b34fb",
+    "notify_char_uuid": "000036f6-0000-1000-8000-00805f9b34fb",
+    "mtu": 247,
+    "default_write_mode": "without_response"
+  },
+  "crc16": {
+    "poly": 4129,
+    "init": 65535,
+    "xorout": 0
+  },
+  "frame": {
+    "width": 16,
+    "height": 16,
+    "pixel_format": "RGB565LE",
+    "flags": {
+      "gamma": false,
+      "dither": false
+    },
+    "frame_id": 58,
+    "chunk_total": 4
+  },
+  "packets": [
+    {
+      "type": "SOF",
+      "hex": "AA 55 49 4D 01 3A 10 00 10 00 01 00 04 00 H1 H2"
+    },
+    {
+      "type": "CHUNK",
+      "chunk_idx": 0,
+      "row_start": 0,
+      "row_count": 4,
+      "payload_len": 128,
+      "payload_hex": "<128 bytes hex...>",
+      "hex": "A1 C1 3A 00 00 00 00 04 00 80 00 <payload> C1 C2"
+    },
+    {
+      "type": "CHUNK",
+      "chunk_idx": 1,
+      "row_start": 4,
+      "row_count": 4,
+      "payload_len": 128,
+      "payload_hex": "<128 bytes hex...>"
+    },
+    {
+      "type": "CHUNK",
+      "chunk_idx": 2,
+      "row_start": 8,
+      "row_count": 4,
+      "payload_len": 128,
+      "payload_hex": "<128 bytes hex...>"
+    },
+    {
+      "type": "CHUNK",
+      "chunk_idx": 3,
+      "row_start": 12,
+      "row_count": 4,
+      "payload_len": 128,
+      "payload_hex": "<128 bytes hex...>"
+    },
+    {
+      "type": "EOF",
+      "hex": "A2 C2 3A 04 00 F1 F2"
+    }
+  ]
+}

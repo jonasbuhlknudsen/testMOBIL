@@ -1,0 +1,4 @@
+type,fields
+SOF,"magic,proto_ver,frame_id,width,height,pixel_format,flags,chunk_total,header_crc16"
+CHUNK,"magic,frame_id,chunk_idx,row_start,row_count,payload_len,payload,payload_crc16"
+EOF,"magic,frame_id,chunk_total,frame_crc16"
