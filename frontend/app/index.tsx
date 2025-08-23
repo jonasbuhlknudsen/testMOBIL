@@ -1,16 +1,21 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Link, router } from 'expo-router';
+import { Link, router, usePathname } from 'expo-router';
 import { useEffect } from 'react';
 
 export default function Index() {
-  // Auto-navigate to tabs after 1 second
+  const pathname = usePathname();
+  
+  // Auto-navigate to tabs after 1 second, but only if we're actually on the index page
   useEffect(() => {
-    const timer = setTimeout(() => {
-      router.replace('/(tabs)/connect');
-    }, 1000);
+    // Only auto-navigate if we're on the root index path
+    if (pathname === '/') {
+      const timer = setTimeout(() => {
+        router.replace('/(tabs)/connect');
+      }, 1000);
 
-    return () => clearTimeout(timer);
-  }, []);
+      return () => clearTimeout(timer);
+    }
+  }, [pathname]);
 
   return (
     <View style={styles.container}>
