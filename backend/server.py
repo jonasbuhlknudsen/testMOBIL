@@ -333,7 +333,9 @@ const creds = null;
 async def admin_page(_=Depends(verify_admin)):
     # The browser will send the Authorization header automatically when using Basic Auth.
     # Our inline JS expects the same header for the protected POST/DELETE; we precompute a placeholder token.
-    html = ADMIN_HTML.replace('NEED_BASIC_AUTH', 'Basic ')
+    import base64
+    token = "Basic " + base64.b64encode(f"{ADMIN_USERNAME}:{ADMIN_PASSWORD}".encode()).decode()
+    html = ADMIN_HTML.replace('NEED_BASIC_AUTH', token)
     return HTMLResponse(html)
 
 # Mount router
