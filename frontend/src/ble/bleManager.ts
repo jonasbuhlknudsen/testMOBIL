@@ -18,9 +18,26 @@ function createBleManager() {
       requestMTU: async () => 23,
     };
   }
-  // Dynamisk require kun på native
-  const { BleManager } = require('react-native-ble-plx');
-  return new BleManager();
+  
+  // For Expo Go, return a mock manager since react-native-ble-plx doesn't work
+  try {
+    const { BleManager } = require('react-native-ble-plx');
+    return new BleManager();
+  } catch (e) {
+    // Fallback for Expo Go
+    console.log('BLE not available in Expo Go - using mock manager');
+    return {
+      startDeviceScan: () => { console.log('Mock BLE scan started'); },
+      stopDeviceScan: () => { console.log('Mock BLE scan stopped'); },
+      connectToDevice: async () => { 
+        console.log('Mock BLE connect');
+        throw new Error('BLE ikke tilgængelig i Expo Go - brug development APK'); 
+      },
+      requestMTU: async () => 23,
+      state: () => 'PoweredOff',
+      onStateChange: () => ({ remove: () => {} }),
+    };
+  }
 }
 
 export const getBleManager = () => {
