@@ -1,0 +1,46 @@
+========================================
+🚀 NERDVAERKET - KOMPLET SYSTEM 🚀
+========================================
+
+VIGTIGT! Din app består af 2 dele:
+- FRONTEND (React Native app)
+- BACKEND (Python server til BLE og data)
+
+📋 HVAD DU SKAL INSTALLERE:
+1. Node.js (til frontend)
+2. Python (til backend)
+
+🔧 INSTALLER PYTHON:
+- Gå til: https://www.python.org/downloads/
+- Download nyeste version
+- VIGTIGT: Vink "Add Python to PATH" af!
+
+📁 INDHOLD I DENNE PAKKE:
+- frontend/ (din mobile app)
+- backend/ (server der håndterer data)
+- build-apk.bat (bygger din APK)
+- start-backend.bat (starter serveren)
+
+🎯 SÅDAN GØR DU:
+
+TRIN 1: Start backend serveren
+1. Dobbeltklik på "start-backend.bat" 
+2. Lad vinduet være åbent!
+
+TRIN 2: Byg din APK
+1. Dobbeltklik på "build-apk.bat"
+2. Vent på APK bliver lavet
+
+TRIN 3: Test din app!
+1. Installer APK på telefon
+2. Sørg for backend serveren kører
+3. Test alle funktioner!
+
+🔗 FORBINDELSE:
+- Frontend snakker med backend via HTTP
+- Backend håndterer al BLE kommunikation
+- Begge dele skal køre for fuld funktionalitet!
+
+❓ HJÆLP:
+- Hvis noget ikke virker, tjek at både Node.js og Python er installeret
+- Sørg for backend serveren kører før du tester appen
