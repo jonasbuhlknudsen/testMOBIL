@@ -1,30 +1,86 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
-import { ThemedBackground, Tile } from '../../src/ui/components';
-import { HeroSection } from '../../src/ui/HeroSection';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Link } from 'expo-router';
-import { spacing } from '../../src/ui/theme';
+import { Ionicons } from '@expo/vector-icons';
 
-export default function Media(){
+export default function Media() {
   return (
-    <ThemedBackground>
-      <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-        <HeroSection 
-          title="Media & indhold"
-          subtitle="Billeder, tekst og diagnostik for din iDot-3"
-        />
-        <Link href="/music-visualizer" asChild><Tile icon="musical-notes" title="Music Visualizer" subtitle="Lyd-reaktive LED displays" onPress={()=>{}} accent={true} /></Link>
-        <Link href="/advanced-features" asChild><Tile icon="construct" title="Advanced Features" subtitle="DIY Editor og Musik/Mikrofon" onPress={()=>{}} /></Link>
-        <Link href="/media-library" asChild><Tile icon="albums-outline" title="Media Bibliotek" subtitle="Billeder, GIF'er og templates" onPress={()=>{}} /></Link>
-        <Link href="/image" asChild><Tile icon="camera" title="Kamera/Upload" subtitle="Tag billede eller upload fil" onPress={()=>{}} /></Link>
-        <Link href="/text" asChild><Tile icon="text" title="Tekst Scroller" subtitle="Scrollende tekst meddelelser" onPress={()=>{}} /></Link>
-        <Link href="/status" asChild><Tile icon="information-circle" title="Status & Diagnostik" subtitle="Device info og BLE status" onPress={()=>{}} /></Link>
+    <View style={styles.container}>
+      <ScrollView>
+        <Text style={styles.title}>Media & Indhold</Text>
+        <Text style={styles.subtitle}>Billeder, tekst og diagnostik for din iDot-3</Text>
+
+        <Link href="/music-visualizer" asChild>
+          <TouchableOpacity style={styles.tile}>
+            <Ionicons name="musical-notes" size={24} color="#00d4ff" />
+            <Text style={styles.tileTitle}>Music Visualizer</Text>
+            <Text style={styles.tileSubtitle}>Lyd-reaktive LED displays</Text>
+          </TouchableOpacity>
+        </Link>
+
+        <Link href="/image" asChild>
+          <TouchableOpacity style={styles.tile}>
+            <Ionicons name="camera" size={24} color="#00d4ff" />
+            <Text style={styles.tileTitle}>Billede Upload</Text>
+            <Text style={styles.tileSubtitle}>Tag billede eller upload fil</Text>
+          </TouchableOpacity>
+        </Link>
+
+        <Link href="/text" asChild>
+          <TouchableOpacity style={styles.tile}>
+            <Ionicons name="text" size={24} color="#00d4ff" />
+            <Text style={styles.tileTitle}>Tekst Scroller</Text>
+            <Text style={styles.tileSubtitle}>Scrollende tekst meddelelser</Text>
+          </TouchableOpacity>
+        </Link>
+
+        <Link href="/status" asChild>
+          <TouchableOpacity style={styles.tile}>
+            <Ionicons name="information-circle" size={24} color="#00d4ff" />
+            <Text style={styles.tileTitle}>Status & Diagnostik</Text>
+            <Text style={styles.tileSubtitle}>Device info og BLE status</Text>
+          </TouchableOpacity>
+        </Link>
       </ScrollView>
-    </ThemedBackground>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-  content: { padding: spacing.md },
+  container: {
+    flex: 1,
+    backgroundColor: '#0b141b',
+    padding: 20,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#e6f0ff',
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#7a8ca0',
+    marginBottom: 32,
+  },
+  tile: {
+    backgroundColor: '#1a2332',
+    padding: 20,
+    borderRadius: 12,
+    marginBottom: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  tileTitle: {
+    color: '#e6f0ff',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginLeft: 16,
+    flex: 1,
+  },
+  tileSubtitle: {
+    color: '#7a8ca0',
+    fontSize: 14,
+    marginTop: 4,
+  },
 });
