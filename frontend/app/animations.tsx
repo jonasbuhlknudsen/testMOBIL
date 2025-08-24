@@ -1,297 +1,129 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, FlatList, TouchableOpacity } from 'react-native';
-import { ThemedBackground, Card, InputField } from '../src/ui/components';
-import { AnimationCard } from '../src/ui/AnimationCard';
-import { HeroSection } from '../src/ui/HeroSection';
-import { EmptyState } from '../src/ui/EmptyState';
-import { palette, spacing, radius } from '../src/ui/theme';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { 
-  animationCategories, 
-  getAnimationsByCategory, 
-  searchAnimations,
-  getAnimationStats,
-  AnimationItem 
-} from '../src/data/animationsLibrary';
-import { useBleStore } from '../src/store/bleStore';
-import * as Haptics from 'expo-haptics';
 
-export default function AnimationsLibrary() {
-  const { detectedScreenSize, deviceInfo } = useBleStore();
-  const [selectedCategory, setSelectedCategory] = useState('farver');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [animations, setAnimations] = useState<AnimationItem[]>(
-    getAnimationsByCategory('farver', detectedScreenSize || '16x16')
-  );
+export default function Animations() {
+  const [selectedAnimation, setSelectedAnimation] = useState('rainbow');
 
-  // Opdater animations når screen size ændres
-  useEffect(() => {
-    const screenSize = detectedScreenSize || '16x16';
-    setAnimations(getAnimationsByCategory(selectedCategory, screenSize));
-  }, [detectedScreenSize, selectedCategory]);
-
-  const handleCategoryPress = (categoryId: string) => {
-    setSelectedCategory(categoryId);
-    const screenSize = detectedScreenSize || '16x16';
-    setAnimations(getAnimationsByCategory(categoryId, screenSize));
-    setSearchQuery('');
-    Haptics.selectionAsync();
-  };
-
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    const screenSize = detectedScreenSize || '16x16';
-    if (query.trim()) {
-      setAnimations(searchAnimations(query, screenSize));
-    } else {
-      setAnimations(getAnimationsByCategory(selectedCategory, screenSize));
-    }
-  };
-
-  const handleAnimationPress = (animation: AnimationItem) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    console.log('Selected animation:', animation.name, 'for', detectedScreenSize);
-  };
-
-  const handleToggleLike = (animationId: string) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    // TODO: Implementer like funktionalitet
-    console.log('Toggle like for:', animationId);
-  };
-
-  const handleDownload = (animation: AnimationItem) => {
-    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    // TODO: Implementer download funktionalitet
-    console.log('Download animation:', animation.name);
-  };
-
-  const renderAnimationCard = ({ item }: { item: AnimationItem }) => (
-    <AnimationCard
-      animation={item}
-      onPress={() => handleAnimationPress(item)}
-      onToggleLike={() => handleToggleLike(item.id)}
-      onDownload={() => handleDownload(item)}
-    />
-  );
-
-  // Get animation stats for device
-  const stats = getAnimationStats(detectedScreenSize || '16x16');
+  const animations = [
+    { id: 'rainbow', name: 'Regnbue', icon: 'color-palette', description: 'Glidende regnbue farver' },
+    { id: 'fire', name: 'Ild', icon: 'flame', description: 'Flakkende ild effekt' },
+    { id: 'wave', name: 'Bølge', icon: 'pulse', description: 'Bølgende lys effekt' },
+    { id: 'sparkle', name: 'Glimmer', icon: 'sparkles', description: 'Tilfældige glimmer' },
+    { id: 'matrix', name: 'Matrix', icon: 'grid', description: 'Matrix regneffekt' },
+    { id: 'heartbeat', name: 'Hjerteslag', icon: 'heart', description: 'Pulserende hjerte' },
+  ];
 
   return (
-    <ThemedBackground>
-      <ScrollView style={styles.container}>
-        {/* Enhanced Hero Section with device info */}
-        <View style={styles.heroContainer}>
-          <HeroSection
-            title="Animations Bibliotek"
-            subtitle={`${stats.total} animationer til ${deviceInfo?.model || 'din iDot enhed'}`}
-            accent={true}
-          />
-          
-          {/* Device compatibility info */}
-          {detectedScreenSize && (
-            <Card style={styles.deviceInfoCard}>
-              <View style={styles.deviceInfo}>
-                <Ionicons name="tv" size={20} color={palette.tint} />
-                <View style={styles.deviceInfoText}>
-                  <Text style={styles.deviceInfoTitle}>
-                    Optimeret til {detectedScreenSize}
-                  </Text>
-                  <Text style={styles.deviceInfoSubtitle}>
-                    {stats.total} kompatible animationer fundet
-                  </Text>
-                </View>
-                <View style={styles.qualityBadge}>
-                  <Text style={styles.qualityText}>
-                    {detectedScreenSize === '16x16' ? 'BASIC' : 
-                     detectedScreenSize === '32x32' ? 'STANDARD' : 'HD'}
-                  </Text>
-                </View>
-              </View>
-            </Card>
-          )}
-        </View>
+    <View style={styles.container}>
+      <ScrollView>
+        <Text style={styles.title}>Animationer</Text>
+        <Text style={styles.subtitle}>Dynamiske LED effekter</Text>
 
-        {/* Search Bar */}
-        <InputField
-          value={searchQuery}
-          onChangeText={handleSearch}
-          placeholder="Søg animationer..."
-          icon="search"
-          clearable={true}
-          style={styles.searchInput}
-        />
-
-        {/* Categories */}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoriesContainer}>
-          {animationCategories.map((category) => (
-            <TouchableOpacity
-              key={category.id}
-              style={[
-                styles.categoryButton,
-                selectedCategory === category.id && styles.categoryButtonActive
-              ]}
-              onPress={() => handleCategoryPress(category.id)}
-              activeOpacity={0.7}
-            >
-              <Ionicons
-                name={category.icon as any}
-                size={20}
-                color={selectedCategory === category.id ? '#001a2e' : palette.muted}
-              />
+        {animations.map((animation) => (
+          <TouchableOpacity
+            key={animation.id}
+            style={[
+              styles.animationCard,
+              selectedAnimation === animation.id && styles.selectedCard
+            ]}
+            onPress={() => setSelectedAnimation(animation.id)}
+          >
+            <Ionicons 
+              name={animation.icon as any} 
+              size={24} 
+              color={selectedAnimation === animation.id ? '#001a2e' : '#00d4ff'} 
+            />
+            <View style={styles.animationInfo}>
               <Text style={[
-                styles.categoryText,
-                selectedCategory === category.id && styles.categoryTextActive
+                styles.animationName,
+                selectedAnimation === animation.id && styles.selectedText
               ]}>
-                {category.name}
+                {animation.name}
               </Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
+              <Text style={[
+                styles.animationDescription,
+                selectedAnimation === animation.id && styles.selectedDescription
+              ]}>
+                {animation.description}
+              </Text>
+            </View>
+            {selectedAnimation === animation.id && (
+              <Ionicons name="checkmark-circle" size={24} color="#001a2e" />
+            )}
+          </TouchableOpacity>
+        ))}
 
-        {/* Results Header */}
-        <View style={styles.resultsHeader}>
-          <Text style={styles.resultsTitle}>
-            {searchQuery ? 
-              `Søgeresultater (${animations.length})` : 
-              `${animationCategories.find(c => c.id === selectedCategory)?.name} (${animations.length})`
-            }
-          </Text>
-          
-          {/* Screen size indicator */}
-          <View style={styles.screenSizeIndicator}>
-            <Text style={styles.screenSizeText}>
-              {detectedScreenSize || '16x16'}
-            </Text>
-          </View>
-        </View>
-
-        {/* Animations Grid */}
-        <View style={styles.gridContainer}>
-          {animations.length > 0 ? (
-            <FlatList
-              data={animations}
-              renderItem={renderAnimationCard}
-              keyExtractor={(item) => item.id}
-              numColumns={2}
-              columnWrapperStyle={styles.row}
-              scrollEnabled={false}
-              showsVerticalScrollIndicator={false}
-            />
-          ) : (
-            <EmptyState
-              icon="search-outline"
-              title="Ingen animationer fundet"
-              description="Prøv at søge efter noget andet eller vælg en anden kategori."
-            />
-          )}
-        </View>
-
-        <View style={{ height: spacing.xl }} />
+        <TouchableOpacity style={styles.playButton}>
+          <Ionicons name="play" size={20} color="#001a2e" />
+          <Text style={styles.buttonText}>Start Animation</Text>
+        </TouchableOpacity>
       </ScrollView>
-    </ThemedBackground>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#0b141b',
+    padding: 20,
   },
-  heroContainer: {
-    paddingHorizontal: spacing.md,
-    paddingTop: spacing.md,
-    marginBottom: spacing.lg,
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#e6f0ff',
+    marginBottom: 8,
   },
-  deviceInfoCard: {
-    marginTop: spacing.md,
-  },
-  deviceInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.md,
-  },
-  deviceInfoText: {
-    flex: 1,
-  },
-  deviceInfoTitle: {
-    color: palette.text,
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  deviceInfoSubtitle: {
-    color: palette.muted,
-    fontSize: 12,
-    marginTop: 2,
-  },
-  qualityBadge: {
-    backgroundColor: palette.tint,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: 4,
-    borderRadius: radius.sm,
-  },
-  qualityText: {
-    color: '#001a2e',
-    fontSize: 10,
-    fontWeight: '700',
-  },
-  searchInput: {
-    marginHorizontal: spacing.md,
-    marginBottom: spacing.md,
-  },
-  categoriesContainer: {
-    marginHorizontal: spacing.md,
-    marginBottom: spacing.lg,
-  },
-  categoryButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    marginRight: spacing.sm,
-    backgroundColor: palette.cardBackground,
-    borderRadius: radius.md,
-    gap: spacing.xs,
-  },
-  categoryButtonActive: {
-    backgroundColor: palette.primary,
-  },
-  categoryText: {
-    color: palette.muted,
-    fontSize: 13,
-    fontWeight: '500',
-  },
-  categoryTextActive: {
-    color: '#001a2e',
-    fontWeight: '600',
-  },
-  resultsHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: spacing.md,
-    marginBottom: spacing.md,
-  },
-  resultsTitle: {
-    color: palette.text,
+  subtitle: {
     fontSize: 16,
-    fontWeight: '600',
+    color: '#7a8ca0',
+    marginBottom: 32,
   },
-  screenSizeIndicator: {
-    backgroundColor: palette.cardBackground,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: 4,
-    borderRadius: radius.sm,
+  animationCard: {
+    backgroundColor: '#1a2332',
+    padding: 20,
+    borderRadius: 12,
+    marginBottom: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  screenSizeText: {
-    color: palette.tint,
-    fontSize: 11,
-    fontWeight: '600',
+  selectedCard: {
+    backgroundColor: '#00d4ff',
   },
-  gridContainer: {
-    paddingHorizontal: spacing.md,
+  animationInfo: {
+    flex: 1,
+    marginLeft: 16,
   },
-  row: {
-    justifyContent: 'space-between',
-    marginBottom: spacing.md,
+  animationName: {
+    color: '#e6f0ff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  animationDescription: {
+    color: '#7a8ca0',
+    fontSize: 14,
+    marginTop: 4,
+  },
+  selectedText: {
+    color: '#001a2e',
+  },
+  selectedDescription: {
+    color: 'rgba(0, 26, 46, 0.7)',
+  },
+  playButton: {
+    backgroundColor: '#00d4ff',
+    padding: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 20,
+  },
+  buttonText: {
+    color: '#001a2e',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginLeft: 8,
   },
 });

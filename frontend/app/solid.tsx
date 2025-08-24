@@ -1,70 +1,102 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { commandBus } from "../src/protocol/commandBus";
-import { ThemedBackground, Card, PrimaryButton, SecondaryButton } from "../src/ui/components";
-import { palette, spacing } from "../src/ui/theme";
-import * as Haptics from 'expo-haptics';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
-function clamp(n: number) { return Math.max(0, Math.min(255, n)); }
-function toHex(n: number) { return clamp(n).toString(16).toUpperCase().padStart(2, "0"); }
+export default function Solid() {
+  const [selectedColor, setSelectedColor] = useState('#ff0000');
 
-export default function SolidColor() {
-  const [r, setR] = useState(0);
-  const [g, setG] = useState(0);
-  const [b, setB] = useState(255);
-
-  const adjustR = (delta: number) => () => { 
-    Haptics.selectionAsync(); 
-    setR(v => clamp(v + delta)); 
-  };
-  const adjustG = (delta: number) => () => { 
-    Haptics.selectionAsync(); 
-    setG(v => clamp(v + delta)); 
-  };
-  const adjustB = (delta: number) => () => { 
-    Haptics.selectionAsync(); 
-    setB(v => clamp(v + delta)); 
-  };
+  const colors = [
+    '#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff',
+    '#ffffff', '#ff8000', '#8000ff', '#ff0080', '#00ff80', '#8080ff',
+  ];
 
   return (
-    <ThemedBackground>
-      <View style={styles.container}>
-        <Card>
-          <Text style={styles.title}>Hel farve</Text>
-          <View style={styles.previewWrapper}>
-            <View style={[styles.preview, { backgroundColor: `rgb(${r},${g},${b})` }]} />
-            <Text style={styles.previewText}>#{toHex(r)}{toHex(g)}{toHex(b)}</Text>
-          </View>
-          {[
-            {label:'R',value:r,adjust:adjustR},
-            {label:'G',value:g,adjust:adjustG},
-            {label:'B',value:b,adjust:adjustB}
-          ].map((c)=> (
-            <View key={c.label} style={styles.row}> 
-              <Text style={styles.label}>{c.label}</Text>
-              <SecondaryButton title="-10" onPress={c.adjust(-10)} />
-              <SecondaryButton title="-1" onPress={c.adjust(-1)} />
-              <View style={styles.valueBox}><Text style={styles.valueText}>{c.value}</Text></View>
-              <SecondaryButton title="+1" onPress={c.adjust(+1)} />
-              <SecondaryButton title="+10" onPress={c.adjust(+10)} />
-            </View>
-          ))}
-          <View style={{ height: spacing.sm }} />
-          <PrimaryButton title="Send farve" onPress={()=> { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium); commandBus.setColorRGB(r,g,b); }} />
-        </Card>
+    <View style={styles.container}>
+      <Text style={styles.title}>Hel Farve</Text>
+      <Text style={styles.subtitle}>Vælg en farve til hele skærmen</Text>
+
+      <View style={[styles.preview, { backgroundColor: selectedColor }]}>
+        <Text style={styles.previewText}>Forhåndsvisning</Text>
       </View>
-    </ThemedBackground>
+
+      <View style={styles.colorGrid}>
+        {colors.map((color) => (
+          <TouchableOpacity
+            key={color}
+            style={[styles.colorButton, { backgroundColor: color }]}
+            onPress={() => setSelectedColor(color)}
+          >
+            {selectedColor === color && (
+              <Ionicons name="checkmark" size={24} color="#fff" />
+            )}
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      <TouchableOpacity style={styles.sendButton}>
+        <Text style={styles.buttonText}>Send til LED Skærm</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: spacing.md },
-  title: { color: palette.text, fontSize: 18, fontWeight: '700', marginBottom: 8 },
-  row: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 10 },
-  label: { color: palette.text, width: 18 },
-  valueBox: { minWidth: 56, alignItems: 'center', paddingVertical: 8, backgroundColor: '#142539', borderRadius: 8 },
-  valueText: { color: palette.text, fontWeight: '700' },
-  previewWrapper: { alignItems: 'center', marginVertical: 12 },
-  preview: { width: 180, height: 100, borderRadius: 16, borderWidth: 1, borderColor: '#203248' },
-  previewText: { color: palette.text, marginTop: 6 },
+  container: {
+    flex: 1,
+    backgroundColor: '#0b141b',
+    padding: 20,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#e6f0ff',
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#7a8ca0',
+    marginBottom: 32,
+  },
+  preview: {
+    height: 120,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 32,
+  },
+  previewText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textShadowColor: '#000',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
+  },
+  colorGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    marginBottom: 32,
+  },
+  colorButton: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginBottom: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#1a2332',
+  },
+  sendButton: {
+    backgroundColor: '#00d4ff',
+    padding: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#001a2e',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });
