@@ -256,7 +256,8 @@ ADMIN_HTML = """
   </div>
 <script>
 (async function(){
-  const creds = 'NEED_BASIC_AUTH';
+  // Basic Auth is handled by the browser after initial challenge; do not override Authorization header in fetch calls.
+const creds = null;
   const drop = document.getElementById('drop');
   const fileInput = document.getElementById('file');
   const bar = document.getElementById('bar');
