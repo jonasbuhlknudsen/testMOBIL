@@ -1,5 +1,6 @@
 import { Platform, PermissionsAndroid } from "react-native";
-import { request, PERMISSIONS, RESULTS } from "react-native-permissions";
+// react-native-permissions removed - not compatible with Expo Go
+// import { request, PERMISSIONS, RESULTS } from "react-native-permissions";
 import { BLE_PROFILES, BleProfile, DetectedProfile, matchesDeviceFilter, SCAN_FILTERS } from "./profiles";
 import { gattQueue, queueConnect, queueDiscover } from "./gattQueue";
 
