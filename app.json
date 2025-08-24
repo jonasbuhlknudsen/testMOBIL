@@ -1,0 +1,58 @@
+{
+  "expo": {
+    "name": "Nerdværket",
+    "slug": "nerdvaerket",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/nerdvaerket_logo.png",
+    "scheme": "nerdvaerket",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": false,
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSBluetoothAlwaysUsageDescription": "This app uses Bluetooth to connect to the iDot-3 LED screen.",
+        "NSBluetoothPeripheralUsageDescription": "This app uses Bluetooth to connect to the iDot-3 LED screen.",
+        "NSLocationWhenInUseUsageDescription": "Location is required for Bluetooth scanning on iOS."
+      }
+    },
+    "android": {
+      "package": "com.anonymous.nerdvaerket",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/nerdvaerket_logo.png",
+        "backgroundColor": "#000000"
+      },
+      "edgeToEdgeEnabled": true,
+      "hermes": false,
+      "jsEngine": "jsc",
+      "permissions": [
+        "android.permission.BLUETOOTH",
+        "android.permission.BLUETOOTH_ADMIN",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.BLUETOOTH_SCAN",
+        "android.permission.BLUETOOTH_CONNECT"
+      ]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/nerdvaerket_logo.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/nerdvaerket_logo.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#000000"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
